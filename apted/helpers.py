@@ -98,6 +98,7 @@ class Tree(object):
         result = str(self.name)
         for child in self.children:
             result += child.bracket()
+        print("printing bracket notation")
         return "{{{}}}".format(result)
 
     def __repr__(self):
@@ -128,3 +129,35 @@ class Tree(object):
             else:
                 stack[-1] += letter
         return tree_stack[0][0]
+
+    @classmethod
+    def from_edges(cls, edges):
+
+        # pass 1: create nodes dictionary
+        nodes = {}
+        for edge in edges:
+            id, parent_id = edge
+            nodes[id] = { 'id': id }
+
+        # pass 2: create trees and parent-child relations
+        forest = []
+        for edge in edges:
+            print(forest)
+            print(edge)
+            id, parent_id = edge
+            node = nodes[id]
+
+            # either make the node a new tree or link it to its parent
+            if id == parent_id:
+                # start a new tree in the forest
+                forest.append(node)
+            else:
+                # add new_node as child to parent
+                parent = nodes[parent_id]
+                if not 'children' in parent:
+                    # ensure parent has a 'children' field
+                    parent['children'] = []
+                children = parent['children']
+                children.append(node)
+
+        print forest
